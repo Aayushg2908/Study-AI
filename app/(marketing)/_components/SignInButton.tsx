@@ -14,7 +14,7 @@ export const SignInButton = ({
       as={Link}
       className="bg-gradient-to-r from-[#7EE7FC] to-[#45D483] text-black font-bold"
     >
-      Sign Up
+      Sign In
     </Button>
   );
 };
