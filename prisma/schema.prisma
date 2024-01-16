@@ -15,5 +15,20 @@ model User {
   username String
   image    String
 
+  posts Post[]
+
   createdAt DateTime @default(now())
+}
+
+model Post {
+  id       String @id @default(uuid())
+  prompt   String
+  response String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
