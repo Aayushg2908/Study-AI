@@ -64,3 +64,51 @@ export const generateResponse = async (index: number, prompt: string) => {
 
   return text;
 };
+
+export const getHistory = async () => {
+  const { userId } = auth();
+  if (!userId) {
+    return redirect("/");
+  }
+
+  const user = await db.user.findUnique({
+    where: {
+      clerkId: userId,
+    },
+  });
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const posts = await db.post.findMany({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  return posts;
+};
+
+export const getPostById = async (id: string) => {
+  const { userId } = auth();
+  if (!userId) {
+    return redirect("/");
+  }
+
+  const user = await db.user.findUnique({
+    where: {
+      clerkId: userId,
+    },
+  });
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const post = await db.post.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  return post;
+};
