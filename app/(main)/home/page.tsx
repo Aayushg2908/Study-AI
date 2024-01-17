@@ -60,6 +60,7 @@ const HomePage = () => {
       <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
         {buttonVariant.map(({ value, Icon }) => (
           <Button
+            key={value}
             onClick={() => handleClick(value)}
             className="bg-gradient-to-r from-[#7EE7FC] to-[#45D483] text-black font-bold"
             startContent={<Icon />}
