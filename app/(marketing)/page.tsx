@@ -1,6 +1,13 @@
+import { redirect } from "next/navigation";
 import { SignInButton } from "./_components/SignInButton";
+import { auth } from "@clerk/nextjs";
 
 export default function Home() {
+  const { userId } = auth();
+  if (userId) {
+    return redirect("/home");
+  }
+
   return (
     <div className="w-full flex flex-col items-center mt-8">
       <div className="flex flex-col gap-y-8 items-center">
