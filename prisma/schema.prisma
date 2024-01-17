@@ -23,7 +23,7 @@ model User {
 model Post {
   id       String @id @default(uuid())
   prompt   String
-  response String
+  response String @db.VarChar(10000)
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

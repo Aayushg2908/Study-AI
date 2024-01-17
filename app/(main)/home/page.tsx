@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Textarea } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   PencilIcon,
   ClipboardList,
@@ -9,10 +9,13 @@ import {
   RefreshCcwDot,
 } from "lucide-react";
 import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
+import { generateResponse } from "@/actions";
 
 const HomePage = () => {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const buttonVariant = [
     {
@@ -39,9 +42,44 @@ const HomePage = () => {
     } else if (prompt.length > 300) {
       toast.error("Prompt must be less than 300 characters");
     } else {
-      console.log(value, prompt);
+      setIsLoading(true);
+      if (value === "Generate Test") {
+        try {
+          const text = await generateResponse(0, prompt);
+          setResponse(text);
+        } catch (error: any) {
+          toast.error(error);
+        }
+      } else if (value === "Generate Notes") {
+        try {
+          const text = await generateResponse(1, prompt);
+          setResponse(text);
+        } catch (error: any) {
+          toast.error(error);
+        }
+      } else if (value === "Generate Answer") {
+        try {
+          const text = await generateResponse(2, prompt);
+          setResponse(text);
+        } catch (error: any) {
+          toast.error(error);
+        }
+      } else if (value === "Analyze Syllabus") {
+        try {
+          const text = await generateResponse(3, prompt);
+          setResponse(text);
+        } catch (error: any) {
+          toast.error(error);
+        }
+      }
+      setPrompt("");
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    toast.loading("Generating response...");
+  }
 
   return (
     <div className="w-full flex flex-col items-center justify-center gap-y-4">
@@ -70,7 +108,9 @@ const HomePage = () => {
         ))}
       </div>
       {response ? (
-        <div>{response}</div>
+        <div className="my-6 flex flex-col gap-6 content border border-foreground-500 sm:w-[500px ] md:w-[700px] p-10 rounded-md">
+          <ReactMarkdown>{response}</ReactMarkdown>
+        </div>
       ) : (
         <div className="mt-8 h-[100px] w-fit py-4 px-10 rounded-md border border-foreground-400 flex items-center justify-center">
           Give prompt to generate response
